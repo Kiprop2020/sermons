@@ -1,251 +1,604 @@
-/* ---------- RESET ---------- */
+/* ========================================
+   RESET
+======================================== */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-:root{
 
---red:#ED1C24;
---blue:#10107D;
---background:#F7F8FB;
---card:#FFFFFF;
---text:#222;
---grey:#666;
---border:#E5E5E5;
+/* ========================================
+   COLOUR PALETTE
+======================================== */
 
-}
+:root {
 
-body{
+    --red: #ED1C24;
+    --blue: #10107D;
 
-font-family:Arial,Helvetica,sans-serif;
-background:var(--background);
-color:var(--text);
+    --background: #F7F8FB;
+    --card: #FFFFFF;
 
-}
+    --text: #222222;
+    --grey: #666666;
 
-.container{
-
-width:min(1000px,92%);
-margin:auto;
+    --border: #E2E2E2;
 
 }
 
-/* ---------- HEADER ---------- */
 
-header{
+/* ========================================
+   GENERAL
+======================================== */
 
-background:white;
-padding:18px 0;
-border-bottom:4px solid var(--red);
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    font-family:
+        "Segoe UI",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    line-height: 1.5;
 
 }
 
-.logo{
+.container {
 
-display:flex;
-align-items:center;
-gap:18px;
+    width: min(1200px, 92%);
 
-}
-
-.logo img{
-
-width:70px;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
-.tagline{
 
-color:var(--grey);
+/* ========================================
+   HEADER
+======================================== */
 
-margin-top:4px;
+header {
 
-}
+    background: white;
 
-/* ---------- HERO ---------- */
-
-.hero{
-
-padding:35px 0;
+    border-bottom: 3px solid var(--red);
 
 }
 
-.hero h2{
+.header-content {
 
-margin-bottom:8px;
+    display: flex;
 
-}
+    align-items: center;
 
-.hero p{
+    justify-content: space-between;
 
-color:var(--grey);
+    gap: 30px;
 
-margin-bottom:25px;
-
-}
-
-.search{
-
-width:100%;
-padding:16px;
-font-size:1rem;
-border-radius:10px;
-border:1px solid #CCC;
+    padding: 18px 0;
 
 }
 
-/* ---------- SECTION ---------- */
 
-.section-title{
+/* Logo */
 
-margin:35px 0 18px;
+.logo {
 
-color:var(--blue);
+    display: flex;
 
-}
+    align-items: center;
 
-/* ---------- FEATURED ---------- */
-
-.featured-card{
-
-background:white;
-border-left:6px solid var(--red);
-padding:28px;
-border-radius:12px;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+    gap: 18px;
 
 }
 
-.featured-card h3{
+.logo img {
 
-font-size:1.7rem;
-margin:10px 0;
+    width: 70px;
 
-}
-
-.date{
-
-color:var(--grey);
+    height: auto;
 
 }
 
-/* ---------- BUTTONS ---------- */
+.logo h1 {
 
-.buttons{
+    font-size: 1.7rem;
 
-margin-top:20px;
-display:flex;
-gap:12px;
-flex-wrap:wrap;
+    line-height: 1.2;
 
 }
 
-.button{
+.tagline {
 
-text-decoration:none;
-padding:12px 18px;
-border-radius:8px;
-background:var(--red);
-color:white;
-font-weight:bold;
+    color: var(--grey);
 
-}
+    margin-top: 5px;
 
-.secondary{
-
-background:var(--blue);
+    font-size: 0.95rem;
 
 }
 
-/* ---------- SERMON LIST ---------- */
 
-.sermon-list{
+/* Navigation */
 
-margin-top:15px;
+nav {
 
-}
+    display: flex;
 
-.sermon-card{
+    align-items: center;
 
-background:white;
-padding:18px 22px;
-border-radius:12px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:15px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);
+    gap: 25px;
 
 }
 
-.play-button{
+nav a {
 
-width:46px;
-height:46px;
-border-radius:50%;
-border:none;
-background:var(--blue);
-color:white;
-font-size:18px;
-cursor:pointer;
+    color: var(--blue);
 
-}
+    text-decoration: none;
 
-/* ---------- FOOTER ---------- */
+    font-weight: 600;
 
-footer{
-
-margin-top:50px;
-padding:25px 0;
-text-align:center;
-color:var(--grey);
+    font-size: 0.95rem;
 
 }
 
-/* ---------- MOBILE ---------- */
+nav a:hover {
 
-@media(max-width:700px){
-
-.logo{
-
-flex-direction:column;
-text-align:center;
+    color: var(--red);
 
 }
 
-.logo img{
 
-width:60px;
+/* ========================================
+   HERO
+======================================== */
 
-}
+.hero {
 
-.featured-card{
-
-padding:20px;
-
-}
-
-.featured-card h3{
-
-font-size:1.35rem;
+    padding: 35px 0 20px;
 
 }
 
-.sermon-card{
+.hero h2 {
 
-flex-direction:column;
-align-items:flex-start;
-gap:15px;
+    margin-bottom: 8px;
+
+    font-size: 2rem;
+
+}
+
+.hero p {
+
+    color: var(--grey);
+
+    margin-bottom: 20px;
 
 }
 
-.play-button{
 
-align-self:flex-end;
+/* Search */
+
+.search {
+
+    width: 100%;
+
+    padding: 15px 16px;
+
+    font-size: 1rem;
+
+    font-family: inherit;
+
+    border-radius: 10px;
+
+    border: 1px solid #CCCCCC;
+
+    background: white;
+
+    outline: none;
 
 }
+
+.search:focus {
+
+    border-color: var(--blue);
+
+    box-shadow: 0 0 0 3px rgba(16, 16, 125, 0.08);
+
+}
+
+
+/* ========================================
+   SECTIONS
+======================================== */
+
+.section-title {
+
+    margin: 0 0 16px;
+
+    color: var(--blue);
+
+    font-size: 1.25rem;
+
+}
+
+.featured-section {
+
+    margin-top: 10px;
+
+}
+
+
+/* ========================================
+   FEATURED SERMON
+======================================== */
+
+.featured-card {
+
+    background: white;
+
+    border-left: 6px solid var(--red);
+
+    padding: 28px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+
+}
+
+.featured-card h3 {
+
+    font-size: 1.7rem;
+
+    margin: 9px 0;
+
+}
+
+.featured-card p {
+
+    margin-bottom: 5px;
+
+}
+
+.date {
+
+    color: var(--grey);
+
+    font-size: 0.9rem;
+
+}
+
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.buttons {
+
+    margin-top: 20px;
+
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+}
+
+.button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    text-decoration: none;
+
+    padding: 12px 18px;
+
+    border-radius: 8px;
+
+    background: var(--red);
+
+    color: white;
+
+    font-weight: 600;
+
+}
+
+.button:hover {
+
+    opacity: 0.9;
+
+}
+
+.secondary {
+
+    background: var(--blue);
+
+}
+
+.button-icon {
+
+    font-size: 0.9rem;
+
+}
+
+.download-icon {
+
+    font-size: 1.2rem;
+
+    line-height: 0.8;
+
+}
+
+
+/* ========================================
+   RECENT SERMONS
+======================================== */
+
+.sermon-list {
+
+    margin-top: 5px;
+
+}
+
+.sermon-card {
+
+    background: white;
+
+    padding: 18px 22px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid var(--border);
+
+}
+
+.sermon-card h3 {
+
+    margin-bottom: 5px;
+
+    font-size: 1.1rem;
+
+}
+
+.sermon-card p {
+
+    color: var(--grey);
+
+    font-size: 0.95rem;
+
+}
+
+.separator {
+
+    margin: 0 8px;
+
+}
+
+
+/* Play button */
+
+.play-button {
+
+    flex-shrink: 0;
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 50%;
+
+    border: 2px solid var(--blue);
+
+    background: white;
+
+    color: var(--blue);
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+}
+
+.play-button:hover {
+
+    background: var(--blue);
+
+    color: white;
+
+}
+
+
+/* ========================================
+   INFORMATION SECTIONS
+======================================== */
+
+.info-section {
+
+    margin-top: 45px;
+
+    padding: 35px 0;
+
+    background: white;
+
+    border-top: 1px solid var(--border);
+
+}
+
+.info-section p {
+
+    color: var(--grey);
+
+    margin-bottom: 8px;
+
+}
+
+.info-section a {
+
+    color: var(--blue);
+
+}
+
+
+/* ========================================
+   FOOTER
+======================================== */
+
+footer {
+
+    padding: 30px 0;
+
+    text-align: center;
+
+    color: var(--grey);
+
+    background: white;
+
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 700px) {
+
+    .container {
+
+        width: 92%;
+
+    }
+
+    .header-content {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        text-align: center;
+
+    }
+
+    .logo {
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+    .logo img {
+
+        width: 60px;
+
+    }
+
+    .logo h1 {
+
+        font-size: 1.45rem;
+
+    }
+
+    nav {
+
+        gap: 18px;
+
+    }
+
+    nav a {
+
+        font-size: 0.9rem;
+
+    }
+
+    .hero {
+
+        padding-top: 28px;
+
+    }
+
+    .hero h2 {
+
+        font-size: 1.6rem;
+
+    }
+
+    .featured-card {
+
+        padding: 20px;
+
+    }
+
+    .featured-card h3 {
+
+        font-size: 1.35rem;
+
+    }
+
+    .sermon-card {
+
+        align-items: flex-start;
+
+    }
+
+    .play-button {
+
+        align-self: center;
+
+    }
+
+}
+
+
+/* ========================================
+   VERY SMALL PHONES
+======================================== */
+
+@media (max-width: 400px) {
+
+    nav {
+
+        gap: 12px;
+
+    }
+
+    nav a {
+
+        font-size: 0.85rem;
+
+    }
+
+    .button {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
 
 }
