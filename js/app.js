@@ -1,5 +1,8 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbw0ih9peIYxyE7tswYVkJ38VHuBcAwLHDgtCfSZq74OcQ3ixL8rP0ErutO77iotB1ISgA/exec";
 
+const R2_BASE_URL =
+    "https://pub-bed1fd7129114b8ab6b0a92c70e3e003.r2.dev";
+
 
 async function loadSermons() {
 
@@ -57,6 +60,9 @@ function displayFeaturedSermon(sermon) {
 
     }
 
+    const audioUrl =
+        `${R2_BASE_URL}/${encodeURIComponent(sermon.fileId)}`;
+
     container.innerHTML = `
 
         <div class="featured-content">
@@ -78,23 +84,25 @@ function displayFeaturedSermon(sermon) {
                 ${sermon.passage}
             </p>
 
+            <audio
+                class="sermon-player"
+                controls
+                preload="metadata">
+
+                <source
+                    src="${audioUrl}"
+                    type="audio/mpeg">
+
+                Your browser does not support audio playback.
+
+            </audio>
+
             <div class="buttons">
 
                 <a
-                    href="#"
-                    class="button">
-
-                    <span class="button-icon">
-                        ▶
-                    </span>
-
-                    Listen
-
-                </a>
-
-                <a
-                    href="#"
-                    class="button secondary">
+                    href="${audioUrl}"
+                    class="button secondary"
+                    download>
 
                     <span class="button-icon download-icon">
                         ↓
