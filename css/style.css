@@ -167,26 +167,72 @@ nav a:hover {
 
 .hero {
 
-    padding: 35px 0 20px;
+    padding: 25px 0 20px;
 
 }
 
-.hero h2 {
 
-    margin-bottom: 8px;
+.browse-label {
 
-    font-size: 2rem;
+    font-size: 1.4rem;
 
-}
+    font-weight: 700;
 
-.hero p {
-
-    color: var(--grey);
-
-    margin-bottom: 20px;
+    margin: 0 0 15px;
 
 }
 
+
+.sermon-filters {
+
+    display: flex;
+
+    gap: 15px;
+
+    max-width: 500px;
+
+}
+
+
+.filter-group {
+
+    flex: 1;
+
+}
+
+
+.filter-group label {
+
+    display: block;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    margin-bottom: 6px;
+
+}
+
+
+.filter-group select {
+
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: white;
+
+    font-family: inherit;
+
+    font-size: 0.95rem;
+
+    cursor: pointer;
+
+}
 
 /* Search */
 
@@ -556,11 +602,26 @@ footer {
 
     }
 
+    .sermon-filters {
+
+        max-width: none;
+
+        gap: 10px;
+
+    }
+
+
+    .filter-group select {
+
+        padding: 10px;
+
+    }
+
     .header-content {
 
         flex-direction: column;
 
-        gap: 15px;
+        gap: 10px;
 
         text-align: center;
 
@@ -568,15 +629,17 @@ footer {
 
     .logo {
 
-        flex-direction: column;
+        flex-direction: row;
 
         gap: 10px;
+
+        text-align: left;
 
     }
 
     .logo img {
 
-        width: 60px;
+        width: 48px;
 
     }
 

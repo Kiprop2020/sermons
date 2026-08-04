@@ -4,6 +4,19 @@ const R2_BASE_URL =
     "https://pub-bed1fd7129114b8ab6b0a92c70e3e003.r2.dev";
 
 
+/* ========================================
+   GLOBAL SERMON DATA
+======================================== */
+
+let allSermons = [];
+
+let featuredSermon = null;
+
+
+/* ========================================
+   LOAD SERMONS
+======================================== */
+
 async function loadSermons() {
 
     try {
@@ -22,9 +35,25 @@ async function loadSermons() {
 
         console.log("Sermons received:", sermons);
 
-        displayFeaturedSermon(sermons[0]);
+        // Store all sermons
+        allSermons = sermons;
 
-        displayRecentSermons(sermons);
+        // The first sermon is the featured sermon
+        featuredSermon = sermons[0];
+
+        // Display the featured sermon
+        displayFeaturedSermon(featuredSermon);
+
+        // Populate Year selector
+        populateYearFilter(sermons);
+
+        // Display all sermons except the featured sermon
+        displayRecentSermons(
+            sermons.slice(1)
+        );
+
+        // Activate filters
+        setupFilters();
 
     }
 
@@ -38,6 +67,216 @@ async function loadSermons() {
         showError();
 
     }
+
+}
+
+
+/* ========================================
+   DATE HELPER
+======================================== */
+
+function getSermonDate(dateValue) {
+
+    if (!dateValue) {
+        return null;
+    }
+
+    // If the API gives us an actual Date object
+    if (dateValue instanceof Date) {
+        return dateValue;
+    }
+
+    const value = String(dateValue).trim();
+
+    // Try normal JavaScript date parsing first
+    const parsed = new Date(value);
+
+    if (!isNaN(parsed.getTime())) {
+        return parsed;
+    }
+
+    return null;
+
+}
+
+/* ========================================
+   FORMAT DATE FOR DISPLAY
+======================================== */
+
+function formatSermonDate(dateValue) {
+
+    if (!dateValue) {
+        return "";
+    }
+
+    const date = getSermonDate(dateValue);
+
+    if (!date) {
+        return String(dateValue).split("T")[0];
+    }
+
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
+
+}
+
+
+/* ========================================
+   POPULATE YEAR FILTER
+======================================== */
+
+function populateYearFilter(sermons) {
+
+    const yearFilter =
+        document.getElementById("year-filter");
+
+    if (!yearFilter) {
+        return;
+    }
+
+    const years = [];
+
+    sermons.forEach(function(sermon) {
+
+        const date =
+            getSermonDate(sermon.date);
+
+        if (date) {
+
+            const year =
+                date.getFullYear();
+
+            if (!years.includes(year)) {
+
+                years.push(year);
+
+            }
+
+        }
+
+    });
+
+    // Newest year first
+    years.sort(function(a, b) {
+        return b - a;
+    });
+
+    // Keep All Years option
+    yearFilter.innerHTML = `
+        <option value="all">
+            All Years
+        </option>
+    `;
+
+    years.forEach(function(year) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = year;
+        option.textContent = year;
+
+        yearFilter.appendChild(option);
+
+    });
+
+}
+
+
+/* ========================================
+   FILTER SETUP
+======================================== */
+
+function setupFilters() {
+
+    const yearFilter =
+        document.getElementById("year-filter");
+
+    const monthFilter =
+        document.getElementById("month-filter");
+
+    if (!yearFilter || !monthFilter) {
+        return;
+    }
+
+    yearFilter.addEventListener(
+        "change",
+        applyFilters
+    );
+
+    monthFilter.addEventListener(
+        "change",
+        applyFilters
+    );
+
+}
+
+
+/* ========================================
+   APPLY YEAR + MONTH FILTERS
+======================================== */
+
+function applyFilters() {
+
+    const yearFilter =
+        document.getElementById("year-filter");
+
+    const monthFilter =
+        document.getElementById("month-filter");
+
+    const selectedYear =
+        yearFilter.value;
+
+    const selectedMonth =
+        monthFilter.value;
+
+
+    const filteredSermons =
+        allSermons.filter(function(sermon) {
+
+            // Do not show the featured sermon in Recent Sermons
+            if (
+                featuredSermon &&
+                sermon.fileId === featuredSermon.fileId
+            ) {
+                return false;
+            }
+
+            const date =
+                getSermonDate(sermon.date);
+
+            if (!date) {
+                return false;
+            }
+
+            const sermonYear =
+                date.getFullYear();
+
+            // JavaScript months are 0-11
+            // Our dropdown uses 1-12
+            const sermonMonth =
+                date.getMonth() + 1;
+
+
+            const yearMatches =
+                selectedYear === "all" ||
+                sermonYear === Number(selectedYear);
+
+
+            const monthMatches =
+                selectedMonth === "all" ||
+                sermonMonth === Number(selectedMonth);
+
+
+            return yearMatches && monthMatches;
+
+        });
+
+
+    displayRecentSermons(filteredSermons);
 
 }
 
@@ -68,7 +307,7 @@ function displayFeaturedSermon(sermon) {
         <div class="featured-content">
 
             <p class="date">
-                ${sermon.date}
+                ${formatSermonDate(sermon.date)}
             </p>
 
             <h3>
@@ -125,7 +364,7 @@ function displayFeaturedSermon(sermon) {
 
 
     // When the featured sermon starts playing,
-    // pause every other sermon player on the page.
+    // pause every other sermon player.
     featuredAudio.addEventListener("play", function() {
 
         document
@@ -157,7 +396,7 @@ function displayRecentSermons(sermons) {
     if (!sermons.length) {
 
         container.innerHTML =
-            "<p>No sermons available.</p>";
+            "<p>No sermons found for the selected period.</p>";
 
         return;
 
@@ -167,7 +406,8 @@ function displayRecentSermons(sermons) {
 
     sermons.forEach(function(sermon) {
 
-        const card = document.createElement("div");
+        const card =
+            document.createElement("div");
 
         card.className = "sermon-card";
 
@@ -181,6 +421,11 @@ function displayRecentSermons(sermons) {
                 <h3>
                     ${sermon.title}
                 </h3>
+
+                <p class="sermon-date">
+                    ${formatSermonDate(sermon.date)}
+
+                </p>
 
                 <p>
 
@@ -234,71 +479,117 @@ function displayRecentSermons(sermons) {
 
         `;
 
+
         container.appendChild(card);
+
 
         const playButton =
             card.querySelector(".play-button");
 
+
         const playerContainer =
             card.querySelector(".sermon-player-container");
+
 
         const audio =
             card.querySelector("audio");
 
-        playButton.addEventListener("click", function() {
 
-            playerContainer.classList.toggle("visible");
+        /* --------------------------------
+           PLAY BUTTON
+        -------------------------------- */
 
-            if (playerContainer.classList.contains("visible")) {
+        playButton.addEventListener(
+            "click",
+            function() {
 
-                audio.play();
+                playerContainer.classList.toggle(
+                    "visible"
+                );
+
+
+                if (
+                    playerContainer.classList.contains(
+                        "visible"
+                    )
+                ) {
+
+                    audio.play();
+
+                    playButton.textContent = "❚❚";
+
+                    playButton.setAttribute(
+                        "aria-label",
+                        "Pause " + sermon.title
+                    );
+
+                }
+
+                else {
+
+                    audio.pause();
+
+                    playButton.textContent = "▶";
+
+                    playButton.setAttribute(
+                        "aria-label",
+                        "Play " + sermon.title
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* --------------------------------
+           AUDIO PLAY
+        -------------------------------- */
+
+        audio.addEventListener(
+            "play",
+            function() {
+
+                // Pause any other sermon playing
+                document
+                    .querySelectorAll(".sermon-player")
+                    .forEach(function(otherAudio) {
+
+                        if (otherAudio !== audio) {
+
+                            otherAudio.pause();
+
+                        }
+
+                    });
+
 
                 playButton.textContent = "❚❚";
 
-                playButton.setAttribute(
-                    "aria-label",
-                    "Pause " + sermon.title
-                );
-
-            } else {
-
-                audio.pause();
-
-                playButton.textContent = "▶";
-
-                playButton.setAttribute(
-                    "aria-label",
-                    "Play " + sermon.title
+                playButton.classList.add(
+                    "playing"
                 );
 
             }
+        );
 
-        });
 
-        audio.addEventListener("play", function() {
+        /* --------------------------------
+           AUDIO PAUSE
+        -------------------------------- */
 
-            // Pause any other sermon that may be playing
-            document
-                .querySelectorAll(".sermon-player")
-                .forEach(function(otherAudio) {
+        audio.addEventListener(
+            "pause",
+            function() {
 
-                    if (otherAudio !== audio) {
-                        otherAudio.pause();
-                    }
+                playButton.textContent = "▶";
 
-                });
+                playButton.classList.remove(
+                    "playing"
+                );
 
-            playButton.textContent = "❚❚";
-            playButton.classList.add("playing");
-
-        });
-
-        audio.addEventListener("pause", function() {
-
-            playButton.textContent = "▶";
-            playButton.classList.remove("playing");
-
-        });
+            }
+        );
 
     });
 
@@ -317,12 +608,14 @@ function showError() {
     const sermons =
         document.getElementById("sermon-list");
 
+
     featured.innerHTML = `
         <p>
             We couldn't load the latest sermon.
             Please try again later.
         </p>
     `;
+
 
     sermons.innerHTML = `
         <p>
