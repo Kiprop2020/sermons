@@ -118,6 +118,30 @@ function displayFeaturedSermon(sermon) {
 
     `;
 
+
+    // Get the featured sermon audio player
+    const featuredAudio =
+        container.querySelector(".sermon-player");
+
+
+    // When the featured sermon starts playing,
+    // pause every other sermon player on the page.
+    featuredAudio.addEventListener("play", function() {
+
+        document
+            .querySelectorAll(".sermon-player")
+            .forEach(function(otherAudio) {
+
+                if (otherAudio !== featuredAudio) {
+
+                    otherAudio.pause();
+
+                }
+
+            });
+
+    });
+
 }
 
 
@@ -147,9 +171,12 @@ function displayRecentSermons(sermons) {
 
         card.className = "sermon-card";
 
+        const audioUrl =
+            `${R2_BASE_URL}/${encodeURIComponent(sermon.fileId)}`;
+
         card.innerHTML = `
 
-            <div>
+            <div class="sermon-info">
 
                 <h3>
                     ${sermon.title}
@@ -179,9 +206,99 @@ function displayRecentSermons(sermons) {
 
             </button>
 
+            <div class="sermon-player-container">
+
+                <audio
+                    class="sermon-player"
+                    controls
+                    preload="metadata">
+
+                    <source
+                        src="${audioUrl}"
+                        type="audio/mpeg">
+
+                    Your browser does not support audio playback.
+
+                </audio>
+
+                <a
+                    href="${audioUrl}"
+                    class="download-link"
+                    download>
+
+                    ↓ Download
+
+                </a>
+
+            </div>
+
         `;
 
         container.appendChild(card);
+
+        const playButton =
+            card.querySelector(".play-button");
+
+        const playerContainer =
+            card.querySelector(".sermon-player-container");
+
+        const audio =
+            card.querySelector("audio");
+
+        playButton.addEventListener("click", function() {
+
+            playerContainer.classList.toggle("visible");
+
+            if (playerContainer.classList.contains("visible")) {
+
+                audio.play();
+
+                playButton.textContent = "❚❚";
+
+                playButton.setAttribute(
+                    "aria-label",
+                    "Pause " + sermon.title
+                );
+
+            } else {
+
+                audio.pause();
+
+                playButton.textContent = "▶";
+
+                playButton.setAttribute(
+                    "aria-label",
+                    "Play " + sermon.title
+                );
+
+            }
+
+        });
+
+        audio.addEventListener("play", function() {
+
+            // Pause any other sermon that may be playing
+            document
+                .querySelectorAll(".sermon-player")
+                .forEach(function(otherAudio) {
+
+                    if (otherAudio !== audio) {
+                        otherAudio.pause();
+                    }
+
+                });
+
+            playButton.textContent = "❚❚";
+            playButton.classList.add("playing");
+
+        });
+
+        audio.addEventListener("pause", function() {
+
+            playButton.textContent = "▶";
+            playButton.classList.remove("playing");
+
+        });
 
     });
 

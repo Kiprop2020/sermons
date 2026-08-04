@@ -364,13 +364,13 @@ nav a:hover {
 
     border-radius: 12px;
 
-    display: flex;
+    display: grid;
 
-    justify-content: space-between;
+    grid-template-columns: 1fr auto;
 
     align-items: center;
 
-    gap: 20px;
+    gap: 12px 20px;
 
     margin-bottom: 15px;
 
@@ -422,6 +422,68 @@ nav a:hover {
     font-size: 17px;
 
     cursor: pointer;
+
+}
+
+.play-button.playing{
+    background: var(--blue);
+    color: white;
+}
+
+.sermon-info {
+    min-width: 0;
+}
+
+
+.sermon-player-container {
+
+    grid-column: 1 / -1;
+
+    display: none;
+
+    width: 100%;
+
+    margin-top: 5px;
+
+}
+
+
+.sermon-player-container.visible {
+
+    display: block;
+
+}
+
+
+.sermon-player {
+
+    width: 100%;
+
+    display: block;
+
+}
+
+
+.download-link {
+
+    display: inline-block;
+
+    margin-top: 10px;
+
+    font-size: 14px;
+
+    color: var(--blue);
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+}
+
+
+.download-link:hover {
+
+    text-decoration: underline;
 
 }
 
