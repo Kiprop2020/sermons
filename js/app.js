@@ -707,6 +707,18 @@ function setupSearch() {
 
             applyFilters();
 
+            // Close search when search box is cleared
+            if (searchTerm == "") {
+
+                searchContainer.classList.remove("visible");
+
+                searchToggle.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
         }
     );
 
