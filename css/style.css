@@ -264,6 +264,49 @@ nav a:hover {
 
 }
 
+/* Search toggle */
+
+.search-toggle {
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    padding: 5px;
+
+}
+
+
+/* Search container */
+
+.search-container {
+
+    display: none;
+
+    width: 240px;
+
+}
+
+
+.search-container.visible {
+
+    display: block;
+
+}
+
+
+.search-container .search {
+
+    padding: 9px 12px;
+
+    font-size: 0.9rem;
+
+}
+
 
 /* ========================================
    SECTIONS

@@ -12,6 +12,8 @@ let allSermons = [];
 
 let featuredSermon = null;
 
+let searchTerm = "";
+
 
 /* ========================================
    LOAD SERMONS
@@ -54,6 +56,7 @@ async function loadSermons() {
 
         // Activate filters
         setupFilters();
+        setupSearch();
 
     }
 
@@ -270,8 +273,31 @@ function applyFilters() {
                 selectedMonth === "all" ||
                 sermonMonth === Number(selectedMonth);
 
+            /*Search*/
+            
+            const searchableText = `
 
-            return yearMatches && monthMatches;
+                ${sermon.title || ""}
+                
+                ${sermon.preacher || ""}
+
+                ${sermon.bibleBook || ""}
+
+                ${sermon.passage || ""}
+
+            `.toLowerCase();
+
+
+            const searchMatches = 
+                searchTerm === "" ||
+                searchableText.includes(searchTerm);
+
+
+            return (
+                yearMatches &&
+                monthMatches &&
+                searchMatches
+            );
 
         });
 
@@ -630,5 +656,61 @@ function showError() {
 /* ========================================
    START
 ======================================== */
+
+/* ========================================
+   SEARCH
+======================================== */
+
+function setupSearch() {
+
+    const searchToggle =
+        document.querySelector(".search-toggle");
+
+    const searchContainer =
+        document.querySelector(".search-container");
+
+    const searchInput =
+        document.getElementById("search-input");
+
+
+    if (!searchToggle || !searchContainer || !searchInput) {
+        return;
+    }
+
+
+    searchToggle.addEventListener("click", function() {
+
+        const isVisible =
+            searchContainer.classList.toggle("visible");
+
+        searchToggle.setAttribute(
+            "aria-expanded",
+            isVisible
+        );
+
+
+        if (isVisible) {
+
+            searchInput.focus();
+
+        }
+
+    });
+
+
+    searchInput.addEventListener(
+        "input",
+        function() {
+
+            searchTerm =
+                searchInput.value.trim().toLowerCase();
+
+            applyFilters();
+
+        }
+    );
+
+}
+
 
 loadSermons();
