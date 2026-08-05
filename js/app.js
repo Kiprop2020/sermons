@@ -14,6 +14,10 @@ let featuredSermon = null;
 
 let searchTerm = "";
 
+let displayedSermonsCount = 10;
+
+const sermonsPerLoad = 10;
+
 
 /* ========================================
    LOAD SERMONS
@@ -332,48 +336,73 @@ function displayFeaturedSermon(sermon) {
 
         <div class="featured-content">
 
-            <p class="date">
-                ${formatSermonDate(sermon.date)}
-            </p>
+    <div class="featured-main">
+
+        <div class="featured-info">
 
             <h3>
                 ${sermon.title}
             </h3>
 
+            <p class="sermon-date">
+                ${formatSermonDate(sermon.date)}
+            </p>
+
             <p>
+
                 ${sermon.preacher}
-            </p>
 
-            <p>
+                <span class="separator">
+                    •
+                </span>
+
                 ${sermon.bibleBook}
+
                 ${sermon.passage}
+
             </p>
 
-            <audio
-                class="sermon-player"
-                controls
-                preload="metadata">
+        </div>
 
-                <source
-                    src="${audioUrl}"
-                    type="audio/mpeg">
+        <button
+            class="play-button"
+            aria-label="Play ${sermon.title}">
 
-                Your browser does not support audio playback.
+            ▶
 
-            </audio>
+        </button>
 
-            <div class="buttons">
+    </div>
+
+            <div class="sermon-player-container">
+
+                <audio
+                    class="sermon-player"
+                    controls
+                    preload="metadata">
+
+                    <source
+                        src="${audioUrl}"
+                        type="audio/mpeg">
+
+                    Your browser does not support audio playback.
+
+                </audio>
+
+                <button
+                    class="rewind-button"
+                    type="button">
+
+                    ↶ 10s
+
+                </button>
 
                 <a
                     href="${audioUrl}"
-                    class="button secondary"
+                    class="download-link"
                     download>
 
-                    <span class="button-icon download-icon">
-                        ↓
-                    </span>
-
-                    Download
+                    ↓ Download
 
                 </a>
 
@@ -384,31 +413,143 @@ function displayFeaturedSermon(sermon) {
     `;
 
 
-    // Get the featured sermon audio player
+    /* --------------------------------
+       GET CONTROLS
+    -------------------------------- */
+
+    const playButton =
+        container.querySelector(".play-button");
+
+    const playerContainer =
+        container.querySelector(
+            ".sermon-player-container"
+        );
+
     const featuredAudio =
         container.querySelector(".sermon-player");
 
+    const rewindButton =
+        container.querySelector(".rewind-button");
 
-    // When the featured sermon starts playing,
-    // pause every other sermon player.
-    featuredAudio.addEventListener("play", function() {
 
-        document
-            .querySelectorAll(".sermon-player")
-            .forEach(function(otherAudio) {
+    /* --------------------------------
+       PLAY BUTTON
+    -------------------------------- */
 
-                if (otherAudio !== featuredAudio) {
+    playButton.addEventListener(
+        "click",
+        function() {
 
-                    otherAudio.pause();
+            playerContainer.classList.toggle(
+                "visible"
+            );
 
-                }
 
-            });
+            if (
+                playerContainer.classList.contains(
+                    "visible"
+                )
+            ) {
 
-    });
+                featuredAudio.play();
+
+                playButton.textContent = "❚❚";
+
+                playButton.setAttribute(
+                    "aria-label",
+                    "Pause " + sermon.title
+                );
+
+            }
+
+            else {
+
+                featuredAudio.pause();
+
+                playButton.textContent = "▶";
+
+                playButton.setAttribute(
+                    "aria-label",
+                    "Play " + sermon.title
+                );
+
+            }
+
+        }
+    );
+
+
+    /* --------------------------------
+       AUDIO PLAY
+    -------------------------------- */
+
+    featuredAudio.addEventListener(
+        "play",
+        function() {
+
+            // Pause every other sermon player
+            document
+                .querySelectorAll(".sermon-player")
+                .forEach(function(otherAudio) {
+
+                    if (otherAudio !== featuredAudio) {
+
+                        otherAudio.pause();
+
+                    }
+
+                });
+
+
+            playButton.textContent = "❚❚";
+
+            playButton.classList.add(
+                "playing"
+            );
+
+        }
+    );
+
+
+    /* --------------------------------
+       AUDIO PAUSE
+    -------------------------------- */
+
+    featuredAudio.addEventListener(
+        "pause",
+        function() {
+
+            playButton.textContent = "▶";
+
+            playButton.classList.remove(
+                "playing"
+            );
+
+            if (!featuredAudio.seeking) {
+
+                playerContainer.classList.remove(
+                    "visible"
+                );
+
+            }
+
+        }
+    );
+
+    rewindButton.addEventListener(
+        "click",
+        function() {
+
+            featuredAudio.currentTime =
+                Math.max(
+                    0,
+                    featuredAudio.currentTime - 10
+                );
+
+        }
+    );
 
 }
-
 
 /* ========================================
    RECENT SERMONS
@@ -430,7 +571,12 @@ function displayRecentSermons(sermons) {
 
     container.innerHTML = "";
 
-    sermons.forEach(function(sermon) {
+    // Determine how many sermons to display
+    const sermonsToDisplay =
+        sermons.slice(0, displayedSermonsCount);
+
+
+    sermonsToDisplay.forEach(function(sermon) {
 
         const card =
             document.createElement("div");
@@ -450,7 +596,6 @@ function displayRecentSermons(sermons) {
 
                 <p class="sermon-date">
                     ${formatSermonDate(sermon.date)}
-
                 </p>
 
                 <p>
@@ -492,6 +637,14 @@ function displayRecentSermons(sermons) {
 
                 </audio>
 
+                <button
+                    class="rewind-button"
+                    type="button">
+
+                    ↶ 10s
+
+                </button>
+
                 <a
                     href="${audioUrl}"
                     class="download-link"
@@ -520,6 +673,8 @@ function displayRecentSermons(sermons) {
         const audio =
             card.querySelector("audio");
 
+        const rewindButton =
+            card.querySelector(".rewind-button");
 
         /* --------------------------------
            PLAY BUTTON
@@ -614,13 +769,62 @@ function displayRecentSermons(sermons) {
                     "playing"
                 );
 
+                // Keep the player visible when the user
+                // is interacting with the HTML5 controls.
+                if (!audio.seeking) {
+
+                    playerContainer.classList.remove(
+                        "visible"
+                    );
+
+                }
+
+            }
+        );
+
+        rewindButton.addEventListener(
+            "click",
+            function() {
+
+                audio.currentTime =
+                    Math.max(
+                        0,
+                        audio.currentTime - 10
+                    );
+
             }
         );
 
     });
 
-}
+        // Add Load More button if there are more sermons
+    if (sermons.length > displayedSermonsCount) {
 
+        const loadMoreButton =
+            document.createElement("button");
+
+        loadMoreButton.className =
+            "load-more-button";
+
+        loadMoreButton.textContent =
+            "Load More";
+
+        loadMoreButton.addEventListener(
+            "click",
+            function() {
+
+                displayedSermonsCount += sermonsPerLoad;
+
+                displayRecentSermons(sermons);
+
+            }
+        );
+
+        container.appendChild(loadMoreButton);
+
+    }
+
+}
 
 /* ========================================
    ERROR

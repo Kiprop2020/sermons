@@ -339,7 +339,7 @@ nav a:hover {
 
     border-left: 6px solid var(--red);
 
-    padding: 28px;
+    padding: 18px 22px;
 
     border-radius: 12px;
 
@@ -347,9 +347,27 @@ nav a:hover {
 
 }
 
+.featured-main {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+.featured-info {
+
+    flex: 1;
+
+}
+
 .featured-card h3 {
 
-    font-size: 1.7rem;
+    font-size: 1.1rem;
 
     margin: 9px 0;
 
@@ -615,6 +633,38 @@ nav a:hover {
 
 }
 
+.load-more-button {
+
+    display: block;
+
+    margin: 25px auto 10px;
+
+    padding: 12px 28px;
+
+    border: 2px solid var(--blue);
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: var(--blue);
+
+    font-size: 1rem;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+}
+
+.load-more-button:hover {
+
+    background: var(--blue);
+
+    color: white;
+
+}
+
 
 /* ========================================
    FOOTER
@@ -718,13 +768,13 @@ footer {
 
     .featured-card {
 
-        padding: 20px;
+        padding: 18px 20px;
 
     }
 
     .featured-card h3 {
 
-        font-size: 1.35rem;
+        font-size: 1.1rem;
 
     }
 
@@ -768,5 +818,65 @@ footer {
         justify-content: center;
 
     }
+
+}
+
+.featured-main {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    width: 100%;
+
+}
+
+.featured-info {
+
+    flex: 1;
+
+}
+
+.featured-main .play-button {
+
+    flex-shrink: 0;
+
+    align-self: center;
+
+}
+
+.rewind-button {
+
+    display: inline-block;
+
+    margin-top: 10px;
+
+    padding: 6px 12px;
+
+    border: 1px solid var(--blue);
+
+    border-radius: 6px;
+
+    background: white;
+
+    color: var(--blue);
+
+    font-size: 14px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+}
+
+.rewind-button:hover {
+
+    background: var(--blue);
+
+    color: white;
 
 }
