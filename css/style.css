@@ -312,6 +312,12 @@ nav a:hover {
    SECTIONS
 ======================================== */
 
+.recent-sermons-section {
+
+    margin-top: 12px;
+
+}
+
 .section-title {
 
     margin: 0 0 16px;
@@ -609,15 +615,19 @@ nav a:hover {
 
 .info-section {
 
-    margin-top: 45px;
+    width: min(1200px, 92%);
 
-    padding: 35px 0;
+    margin: 45px auto 0;
+
+    padding: 25px 0;
 
     background: white;
 
     border-top: 1px solid var(--border);
 
 }
+
+
 
 .info-section p {
 
@@ -665,6 +675,16 @@ nav a:hover {
 
 }
 
+.contact-location {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 24px;
+
+}
+
 
 /* ========================================
    FOOTER
@@ -692,6 +712,14 @@ footer {
     .container {
 
         width: 92%;
+
+    }
+
+    .contact-location {
+
+        display: grid;
+
+        grid-template-columns: 1fr;
 
     }
 
